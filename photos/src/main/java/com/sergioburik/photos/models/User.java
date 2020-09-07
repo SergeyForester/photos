@@ -1,5 +1,8 @@
 package com.sergioburik.photos.models;
 
+import com.sergioburik.photos.repositories.SubscriberRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -7,7 +10,6 @@ import java.util.Set;
 @Entity
 @Table(name = "usr")
 public class User {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

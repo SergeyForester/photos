@@ -1,8 +1,10 @@
 package com.sergioburik.photos.controllers;
 
 import com.sergioburik.photos.models.Post;
+import com.sergioburik.photos.models.Subscriber;
 import com.sergioburik.photos.models.User;
 import com.sergioburik.photos.repositories.PostRepository;
+import com.sergioburik.photos.repositories.SubscriberRepository;
 import com.sergioburik.photos.repositories.UserRepository;
 import com.sergioburik.photos.services.PostItemService;
 import com.sergioburik.photos.services.PostService;
@@ -21,6 +23,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -41,6 +45,9 @@ public class APIController {
     @Autowired
     PostItemService postItemService;
 
+    @Autowired
+    SubscriberRepository subscriberRepository;
+
     @Value("${upload.path}")
     String uploadPath;
 
@@ -48,6 +55,30 @@ public class APIController {
     @GetMapping("/users/{id}")
     public User user(@PathVariable("id") Long id) {
         return userRepository.getOne(id);
+    }
+
+    @GetMapping("/users")
+    public List<User> users(@RequestParam(name = "username", required = false) Optional<String> username) {
+
+        if (username.isPresent()) {
+            return userRepository.findByUsernameContaining(username.get());
+        }
+
+        return userRepository.findAll();
+
+    }
+
+    @PostMapping("/subscribers")
+    public Subscriber addSubscriber(@RequestParam Long subId, @RequestParam Long userId) throws Exception {
+        User sub = userRepository.getOne(subId);
+        User user = userRepository.getOne(userId);
+
+        if (subscriberRepository.findByUserAndSubscriber(user, sub).isPresent()) {
+            throw new Exception("Subscriber already exists");
+        }
+
+        Subscriber subscriber = new Subscriber(user, sub);
+        return subscriberRepository.save(subscriber);
     }
 
     @PostMapping("/posts")

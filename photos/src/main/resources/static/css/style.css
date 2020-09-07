@@ -13,6 +13,16 @@ body {
     background: #fafafa;
 }
 
+.search-results {
+    position: absolute;
+    bottom: 0;
+    top: 50px;
+    width: 100%;
+    z-index: 999;
+    height: fit-content;
+    display: none;
+}
+
 .nav-link {
     color: black!important;
     display: inline;
@@ -25,6 +35,34 @@ body {
 .container-radius {
     border-radius: 15px;
     padding: 15px;
+}
+
+.flex-block {
+    display: flex;
+}
+
+.flex-left {
+    align-content: flex-start;
+}
+
+.flex-right {
+    align-content: flex-end;
+}
+
+.color-grey {
+    color: #8e8e8e;
+}
+
+@media (max-width: 992px) {
+    .hide-mobile {
+        display: none;
+    }
+}
+
+
+a {
+    color: black;
+    text-decoration: none;
 }
 
 .btn-black {

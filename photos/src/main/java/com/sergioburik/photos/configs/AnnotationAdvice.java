@@ -1,7 +1,9 @@
 package com.sergioburik.photos.configs;
 
 import com.sergioburik.photos.models.User;
+import com.sergioburik.photos.repositories.SubscriberRepository;
 import com.sergioburik.photos.repositories.UserRepository;
+import com.sergioburik.photos.services.SubscriberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,6 +17,14 @@ public class AnnotationAdvice {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    SubscriberService subscriberService;
+
+    @ModelAttribute("subscriberRepository")
+    public SubscriberService subscriberService() {
+        return subscriberService;
+    }
 
     @ModelAttribute("user")
     public User user() {

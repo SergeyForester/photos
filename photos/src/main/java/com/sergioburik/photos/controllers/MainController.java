@@ -70,6 +70,11 @@ public class MainController {
         return "redirect:/";
     }
 
+    @GetMapping("/search")
+    public String search() {
+        return "search";
+    }
+
     @GetMapping("/new/post")
     public String addPhoto() {
         return "new_photo";

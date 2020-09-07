@@ -22,4 +22,8 @@ public class SubscriberService {
         }
     }
 
+    public boolean ifUserIsSubscriber(User sub, User user) {
+        return subscriberRepository.findByUserAndSubscriber(user, sub).isPresent();
+    }
+
 }
