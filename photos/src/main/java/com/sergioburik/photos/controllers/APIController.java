@@ -17,9 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.expression.Lists;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api")
@@ -94,6 +92,15 @@ public class APIController {
 
         for (Subscriber subscriber : subscribers) {
             posts.addAll(postRepository.findAllByUser(subscriber.getUser()));
+        }
+
+        if (posts.size() > 0) {
+            Collections.sort(posts, new Comparator<Post>() {
+                @Override
+                public int compare(final Post object1, final Post object2) {
+                    return object2.getDate().compareTo(object1.getDate());
+                }
+            });
         }
 
         return posts;

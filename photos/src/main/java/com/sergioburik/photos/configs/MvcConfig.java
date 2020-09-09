@@ -24,10 +24,10 @@ public class MvcConfig implements WebMvcConfigurer {
 //                .addResourceHandler("/css/**")
 //                .addResourceLocations("classpath:/resources/static/css");
 
-//         registry
-//                 .addResourceHandler("/uploads/**")
-//                 .addResourceLocations("file:///" + uploadPath)
-//                 .setCachePeriod(31556926);
+         registry
+                 .addResourceHandler("/uploads/**")
+                 .addResourceLocations("file:///" + uploadPath + "/")
+                 .setCachePeriod(31556926);
     }
 
 }

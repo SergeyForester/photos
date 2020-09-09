@@ -1,6 +1,7 @@
 package com.sergioburik.photos.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.sergioburik.photos.repositories.SubscriberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,7 @@ public class User {
     private boolean active;
 
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private Set<Post> posts = new HashSet<>();
 
     @OneToMany(mappedBy = "user")
