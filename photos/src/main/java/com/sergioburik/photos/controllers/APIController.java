@@ -1,5 +1,7 @@
 package com.sergioburik.photos.controllers;
 
+import com.monitorjbl.json.JsonView;
+import com.monitorjbl.json.Match;
 import com.sergioburik.photos.models.Post;
 import com.sergioburik.photos.models.Subscriber;
 import com.sergioburik.photos.models.User;
@@ -11,18 +13,11 @@ import com.sergioburik.photos.services.PostService;
 import com.sergioburik.photos.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.thymeleaf.expression.Lists;
 
-import javax.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -64,6 +59,7 @@ public class APIController {
             return userRepository.findByUsernameContaining(username.get());
         }
 
+
         return userRepository.findAll();
 
     }
@@ -83,9 +79,24 @@ public class APIController {
 
     @PostMapping("/posts")
     public Post addPost(@RequestParam String text,
-                          @RequestParam MultipartFile image) throws Exception {
+                        @RequestParam MultipartFile image) throws Exception {
 
         return postService.save(text, image);
+    }
+
+    @GetMapping("/users/{id}/feed")
+    public List<Post> feed(@PathVariable Long id) {
+        // find all entities where the user is a subscriber
+        List<Subscriber> subscribers = subscriberRepository.findAllBySubscriberId(id);
+
+        // result list
+        List<Post> posts = new ArrayList<>();
+
+        for (Subscriber subscriber : subscribers) {
+            posts.addAll(postRepository.findAllByUser(subscriber.getUser()));
+        }
+
+        return posts;
     }
 
 

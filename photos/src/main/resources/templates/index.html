@@ -4,8 +4,11 @@
     <meta charset="UTF-8">
     <title>Grid</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+          integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+            integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+            crossorigin="anonymous"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link type="text/css" rel="stylesheet" media="screen" href="/css/style.css">
@@ -13,40 +16,65 @@
 <body>
 <th:block th:include="includes/header.html"></th:block>
 
-<div class="container mt-5 mb-5">
-    <div class="row mt-4">
-        <div class="col-4 post" th:data-name="${post.getUser().getUsername()}" th:data-text="${post.getText()}" th:data-id="${post.getId()}" style="padding: 1px" th:each="post : ${posts}">
-            <a type="button" data-toggle="modal" data-target="#modalLong">
-                <div>
-                    <div th:each="postItem : ${post.getPostItems()}" th:id="'photos-'+${post.getId()}">
-                        <img th:src="'/uploads/'+${postItem.getItemFileName()}" style="width: 100%;height: 100%;"
-                             alt="">
+
+<div th:if="${#httpServletRequest.remoteUser}">
+    <div class="container mt-5 mb-5">
+        <div class="posts"></div>
+    </div>
+
+
+    <p style="display: none" id="user_id" th:text="${user.getId()}"/>
+
+    <script src="/js/scripts.js"></script>
+
+    <script>
+        APIRequest(`/api/users/${$('#user_id').text()}/feed`, function (posts) {
+            console.log(posts);
+            console.log($('#user_id').text());
+            for (let post of posts) {
+                let photos = '';
+                for (let photo of post.postItems) {
+                    photos += `
+                        <img style="width: 100%;" src="/uploads/${photo.itemFileName}" alt="">
+                `;
+                }
+                // <!-- <h5>${post.user.username}</h5>-->
+
+                $('.posts').append(`
+                <div class="background-white container-radius">
+                    <hr>
+                    <div>
+                        ${photos}
                     </div>
                 </div>
-            </a>
-        </div>
-    </div>
+            `);
+            }
+        });
+    </script>
 </div>
 
-<div class="modal fade" id="modalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
-     aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalLongTitle"></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body" id="modal-body">
-
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
+<div th:unless="${#httpServletRequest.remoteUser}">
+    <h3 style="margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);" id="welcome-text"></h3>
 </div>
+
 <script src="/js/scripts.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $("#welcome-text").text(["Hello!", "Привет!", "How is it going?))", "Как дела?))"][getRandomInt(0, 3)]);
+
+        setInterval(() => {
+            $("#welcome-text").text(["Hello!", "Привет!", "How is it going?))", "Как дела?))"][getRandomInt(0, 3)]);
+        }, 2000)
+
+    });
+</script>
+
+
 </body>
 </html>

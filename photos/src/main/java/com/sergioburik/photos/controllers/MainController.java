@@ -47,13 +47,6 @@ public class MainController {
 
     @GetMapping("/")
     public String main(Model model) {
-        List<Post> postList = postRepository.findAllByOrderByDateDesc();
-        if (postList.size() >= 9) {
-            model.addAttribute("posts", postList.subList(0, 9));
-        } else {
-            model.addAttribute("posts", postList);
-        }
-
         return "index";
     }
 
@@ -71,7 +64,14 @@ public class MainController {
     }
 
     @GetMapping("/search")
-    public String search() {
+    public String search(Model model) {
+        List<Post> postList = postRepository.findAllByOrderByDateDesc();
+        if (postList.size() >= 9) {
+            model.addAttribute("posts", postList.subList(0, 9));
+        } else {
+            model.addAttribute("posts", postList);
+        }
+
         return "search";
     }
 

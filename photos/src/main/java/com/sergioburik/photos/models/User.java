@@ -1,5 +1,7 @@
 package com.sergioburik.photos.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.sergioburik.photos.repositories.SubscriberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 

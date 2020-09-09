@@ -15,9 +15,10 @@
 <th:block th:include="includes/header.html"></th:block>
 
 <div class="container mt-5 mb-5">
-    <h5>New post</h5>
-    <h4 th:if="${param.error}" style="color: #ff5d1f">Server error</h4>
+
     <form action="/new/post" class="background-white container-radius" method="post" enctype="multipart/form-data">
+        <h5>New post</h5>
+        <h4 th:if="${param.error}" style="color: #ff5d1f">Server error</h4>
         <div class="form-group">
             <label for="">Text</label>
             <textarea type="text" class="form-control" rows="3" name="text"></textarea>

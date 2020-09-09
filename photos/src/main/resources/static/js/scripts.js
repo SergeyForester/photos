@@ -2,12 +2,18 @@ function APIRequest(url, func, request = "GET", data = null) {
     let el;
 
     if (request === 'POST' || request === "PUT") {
-        el = {
-            'method': request, headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }, body: JSON.stringify(data)
-        }
+        $.ajax({
+
+            url: url,
+            dataType: "json", // Для использования JSON формата получаемых данных
+            method: request, // Что бы воспользоваться POST методом, меняем данную строку на POST
+            data: data,
+            success: function (data) {
+                console.log(data); // Возвращаемые данные выводим в консоль
+                func(data);
+            }
+        });
+        return
     } else {
         el = {'method': request};
     }
@@ -66,12 +72,19 @@ $(".username-search").on("change paste keyup", function () {
     }
 });
 
-// $('.follow').click(function () {
-//     console.log({'subId': parseInt($("#user_id").text()), 'userId': parseInt($("#profile_id").text())});
-//     APIRequest('/api/subscribers', function (res) {
-//         $('.follow').text('Followed');
-//     }, "POST", {'subId': parseInt($("#user_id").text()), 'userId': parseInt($("#profile_id").text())})
-// });
+function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+$('.follow').click(function () {
+    console.log({'subId': parseInt($("#user_id").text()), 'userId': parseInt($("#profile_id").text())});
+    APIRequest('/api/subscribers', function (res) {
+        $('.follow').text('Followed');
+        $('#followers-counter').text(parseInt($('#followers-counter').text()) + 1);
+    }, "POST", {'subId': parseInt($("#user_id").text()), 'userId': parseInt($("#profile_id").text())})
+});
 
 $(".post").click(function () {
     console.log("username: " + $(this).data("name"));

@@ -31,20 +31,18 @@
                     <strong th:text="${profile.getPosts().size()}"/> posts
                 </h6>
                 <h6 style="display: inline-block">
-                    <strong th:text="${profile.getSubscribers().size()}"/> followers
+                    <strong th:text="${profile.getSubscribers().size()}" id="followers-counter"/> followers
                 </h6>
             </div>
 
-            <form action="/api/subscribers" method="post">
-                <input type="hidden" name="subId" th:value="${user.getId()}">
-                <input type="hidden" name="userId" th:value="${profile.getId()}">
-                <button th:if="${user.getUsername() != profile.getUsername() AND !subscriberRepository.ifUserIsSubscriber(user, profile)}"
-                        type="submit"
-                        class="btn btn-primary follow">
-                    Follow
-                </button>
+            <input type="hidden" name="subId" th:value="${user.getId()}">
+            <input type="hidden" name="userId" th:value="${profile.getId()}">
+            <button th:if="${user.getUsername() != profile.getUsername() AND !subscriberRepository.ifUserIsSubscriber(user, profile)}"
+                    type="button"
+                    class="btn btn-primary follow">
+                Follow
+            </button>
 
-            </form>
             <p th:text="${profile.getBio()}"/>
         </div>
     </div>

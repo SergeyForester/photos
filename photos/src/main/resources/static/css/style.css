@@ -32,6 +32,11 @@ body {
     background: white;
 }
 
+.posts {
+    max-width: 614px;
+    margin: auto;
+}
+
 .container-radius {
     border-radius: 15px;
     padding: 15px;
